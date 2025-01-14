@@ -49,7 +49,7 @@ namespace TaskManager.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("task");
+                    b.ToTable("task", (string)null);
                 });
 #pragma warning restore 612, 618
         }
