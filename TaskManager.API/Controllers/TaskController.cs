@@ -1,38 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskManager.API.Data;
+using TaskManager.API.ViewModel.Task;
 
 namespace TaskManager.API.Controllers
 {
-	[Route("task")]
 	public class TaskController : Controller
 	{
 		private readonly DataContext _context;
-        public TaskController(DataContext context)
-        {
-            _context = context;
-        }
-		[HttpGet]
-        public IActionResult GetAllTasks()
+		public TaskController(DataContext context)
 		{
-			var data = _context.Tasks.ToList(); 
+			_context = context;
+		}
+		[HttpGet(ApiRoutes.Task.GetAll)]
+		public IActionResult GetAllTasks()
+		{
+			var data = _context.Tasks.ToList();
 			return Ok(data);
 		}
-		[HttpGet("{id}")]
+		[HttpGet(ApiRoutes.Task.GetById)]
 		public IActionResult GetTaskByID([FromRoute] int id)
 		{
 			var data = _context.Tasks.FirstOrDefault(task => task.Id == id);
 			return Ok(data);
 		}
-		[HttpPost]
-		public IActionResult CreateTask([FromBody] Model.Task task)
+		[HttpPost(ApiRoutes.Task.Create)]
+		public async Task<IActionResult> CreateTask([FromBody] TaskFormVM data)
 		{
-			_context.Tasks.Add(task);
-			_context.SaveChanges();
+			var task = new Model.Task();
+			task.Title = data.Title;
+			await _context.Tasks.AddAsync(task);
+			await _context.SaveChangesAsync();
 			return CreatedAtAction(
 				nameof(GetTaskByID), 
 				new { id = task.Id }, task);
 		}
-		[HttpPut("{id}")]
+		[HttpPut(ApiRoutes.Task.Update)]
 		public IActionResult UpdateTask([FromRoute] int id, [FromBody] Model.Task task)
 		{
 			var data = _context.Tasks.FirstOrDefault(task => task.Id == id);
@@ -48,7 +50,7 @@ namespace TaskManager.API.Controllers
 
 			return Ok(task);
 		}
-		[HttpDelete("{id}")]
+		[HttpDelete(ApiRoutes.Task.Delete)]
 		public IActionResult DeleteTask([FromRoute] int id)
 		{
 			var data = _context.Tasks.FirstOrDefault(task => task.Id == id);
