@@ -10,7 +10,7 @@ namespace TaskManager.API.Model
 		public int Id { get; set; }
 		[Required] 
 		public string Title { get; set; }
-		public string Status { get; set; } = TaskStatus.NotCompleted;
+		public string Status { get; set; }
 		public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 		public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 		public DateTime? DeletedAt { get; set; } 

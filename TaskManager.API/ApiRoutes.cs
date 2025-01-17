@@ -8,7 +8,7 @@
 			public const string GetById = "task/{id}";
 			public const string Create = "task";
 			public const string Update = "task/{id}";
-			public const string Delete = "task";
+			public const string Delete = "task/{id}";
 		}
 	}
 }
